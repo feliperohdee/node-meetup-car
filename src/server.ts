@@ -4,21 +4,27 @@ import * as gpio from 'rpi-gpio';
 
 let server: Server = createServer();
 let wss: ws.Server = new ws.Server({ server });
+let pi: Map<number, ws> = new Map<number, ws>();
 
 server.listen(process.env.PORT || 9090);
 
 wss.on('connection', ws => {
 	console.log('client connected');
 
-	setInterval(() => {
-		if (ws.readyState === 1){
-			ws.send(JSON.stringify({ cmd: 'on' }));
-		}
+	ws.on('message', data => {
+		data = JSON.parse(data);
+		console.log('received data', data);
 
-		setTimeout(() => {
-			if (ws.readyState === 1) {
-				ws.send(JSON.stringify({ cmd: 'off' }));
-			}
-		}, 750);
-	}, 1500);
+		switch (data.cmd) {
+			case 'subscribePi':
+				pi.set(data.id, ws);
+				break;
+			case 'unsubscribePi':
+				pi.delete(data.id);
+				break;
+			default:
+				pi.forEach(ws => ws.send(JSON.stringify({ cmd: data.cmd })));
+				break;
+		}
+	});
 });
