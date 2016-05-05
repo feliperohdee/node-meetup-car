@@ -4,6 +4,7 @@
   "description": "",
   "main": "__build__/iot.js",
   "scripts": {
+    "start": "node __build__/iot.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
