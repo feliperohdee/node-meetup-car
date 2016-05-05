@@ -11,6 +11,8 @@ server.listen(process.env.PORT || 9090);
 wss.on('connection', ws => {
 	console.log('client connected');
 
+	ws.send('welcome to real time world!');
+
 	ws.on('message', data => {
 		data = JSON.parse(data);
 		console.log('received data', data);
