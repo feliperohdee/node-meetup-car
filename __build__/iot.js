@@ -1,30 +1,45 @@
 "use strict";
-var ws = require('ws');
 var gpio = require('rpi-gpio');
-var rxjs_1 = require('rxjs');
+var Serial_1 = require('./Serial');
+var Socket_1 = require('./Socket');
+var serial = new Serial_1.Serial();
+var socket = new Socket_1.Socket();
+// setup pi
 var pin = 18;
-var client = new ws('ws://node-remote-server.herokuapp.com');
 gpio.setup(pin, gpio.DIR_OUT);
 gpio.setMode(gpio.MODE_BCM);
-rxjs_1.Observable.fromEvent(client, 'open')
-    .subscribe(function () {
-    console.log('client is open');
-    client.send(JSON.stringify({ cmd: 'subscribePi', id: 'ledPi' }));
-});
-rxjs_1.Observable.fromEvent(client, 'message')
-    .subscribe(function (data) {
-    try {
-        data = JSON.parse(data);
-    }
-    catch (e) { }
-    console.log('received data', data);
-    if (!data.cmd) {
-        return;
-    }
-    if (data.cmd === 'on') {
-        gpio.write(pin, 1);
-    }
-    else {
-        gpio.write(pin, 0);
-    }
+serial.onReady
+    .subscribe(function (port) {
+    // 
+    socket.onOpen
+        .subscribe(function () {
+        console.log('client is open');
+        socket.send({
+            cmd: 'subscribePi',
+            id: 'ledPi'
+        });
+    });
+    socket.onMessage
+        .subscribe(function (data) {
+        switch (data.cmd) {
+            case 'on':
+                gpio.write(pin, 1);
+                break;
+            case 'off':
+                gpio.write(pin, 0);
+                break;
+            case 'front':
+                port.write('f');
+                break;
+            case 'stop':
+                port.write('s');
+                break;
+            case 'left':
+                port.write('l');
+                break;
+            case 'right':
+                port.write('r');
+                break;
+        }
+    });
 });
