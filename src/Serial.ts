@@ -39,8 +39,6 @@ export class Serial{
 	 * @param {string} data
 	 */
 	send(data: string): void{
-		for (let i = 0; i < 10; ++i) {
-			this.port.write(data);
-		}
+		setTimeout(() => this.port.write(data), 15);
 	}
 }
