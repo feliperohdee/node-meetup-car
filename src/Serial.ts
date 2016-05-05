@@ -23,8 +23,6 @@ export class Serial{
 					return this.onData.error(err);
 				}
 
-				console.log('serial was openned');
-
 				Observable.fromEvent(this.port, 'data')
 					.subscribe(this.onData);
 			});

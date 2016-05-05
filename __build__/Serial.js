@@ -17,7 +17,6 @@ var Serial = (function () {
                 if (err) {
                     return _this.onData.error(err);
                 }
-                console.log('serial was openned');
                 rxjs_1.Observable.fromEvent(_this.port, 'data')
                     .subscribe(_this.onData);
             });
