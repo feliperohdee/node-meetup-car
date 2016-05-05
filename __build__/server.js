@@ -9,7 +9,10 @@ wss.on('connection', function (ws) {
     console.log('client connected');
     ws.send('welcome to real time world!');
     ws.on('message', function (data) {
-        data = JSON.parse(data);
+        try {
+            data = JSON.parse(data);
+        }
+        catch (e) { }
         console.log('received data', data);
         switch (data.cmd) {
             case 'subscribePi':

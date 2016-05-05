@@ -14,7 +14,10 @@ wss.on('connection', ws => {
 	ws.send('welcome to real time world!');
 
 	ws.on('message', data => {
-		data = JSON.parse(data);
+		try{
+			data = JSON.parse(data);
+		}catch(e){}
+		
 		console.log('received data', data);
 
 		switch (data.cmd) {
