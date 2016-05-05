@@ -2,7 +2,7 @@
 var ws = require('ws');
 var gpio = require('rpi-gpio');
 var pin = 18;
-var client = new ws('ws://www.host.com/path');
+var client = new ws('ws://node-remote-server.herokuapp.com');
 gpio.setup(pin, gpio.DIR_OUT);
 gpio.setMode(gpio.MODE_BCM);
 client.on('open', function () {

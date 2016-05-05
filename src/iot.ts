@@ -2,7 +2,7 @@ import * as ws from 'ws';
 import * as gpio from 'rpi-gpio';
 
 let pin: number = 18;
-let client = new ws('ws://www.host.com/path');
+let client = new ws('ws://node-remote-server.herokuapp.com');
 
 gpio.setup(pin, gpio.DIR_OUT);
 gpio.setMode(gpio.MODE_BCM);
