@@ -2,17 +2,16 @@
   "name": "remote",
   "version": "1.0.0",
   "description": "",
-  "main": "__build__/iot.js",
+  "main": "__build__/server.js",
   "scripts": {
-    "start": "node __build__/iot.js",
-    "commit": "npm run compile && git add . && git commit -m 'do changes' && git push origin remote",
+    "start": "node __build__/server.js",
+    "commit": "npm run compile && git add . && git commit -m 'do changes' && git push origin remote-server",
     "compile": "rm -rf __build__ && tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "rpi-gpio": "^0.7.0",
     "ws": "^1.1.0"
   }
 }
