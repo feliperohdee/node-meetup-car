@@ -31,7 +31,9 @@ var Serial = (function () {
      * @param {string} data
      */
     Serial.prototype.send = function (data) {
-        this.port.write(data);
+        for (var i = 0; i < 10; ++i) {
+            this.port.write(data);
+        }
     };
     return Serial;
 }());

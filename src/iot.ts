@@ -32,16 +32,16 @@ serial.onReady
 						gpio.write(pin, 0);
 						break;
 					case 'front':
-						port.write('f');
+						serial.send('f');
 						break;
 					case 'stop':
-						port.write('s');
+						serial.send('s');
 						break;
 					case 'left':
-						port.write('l');
+						serial.send('l');
 						break;
 					case 'right':
-						port.write('r');
+						serial.send('r');
 						break;
 				}
 			});
