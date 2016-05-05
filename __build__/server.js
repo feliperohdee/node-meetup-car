@@ -20,7 +20,7 @@ rxjs_1.Observable.fromEvent(wss, 'connection')
     });
     return rxjs_1.Observable.fromEvent(ws, 'message')
         .takeUntil(takeUntil)
-        .map(function (data) { ws, data; });
+        .map(function (data) { return ({ ws: ws, data: data }); });
 })
     .subscribe(function (response) {
     var ws = response.ws;
@@ -29,7 +29,6 @@ rxjs_1.Observable.fromEvent(wss, 'connection')
         data = JSON.parse(data);
     }
     catch (e) { }
-    console.log('received data', data);
     if (!data.cmd) {
         return;
     }
@@ -44,6 +43,4 @@ rxjs_1.Observable.fromEvent(wss, 'connection')
             pi.forEach(function (ws) { return ws.send(JSON.stringify({ cmd: data.cmd })); });
             break;
     }
-}, function (e) { return console.log('error => ', e); }, function () {
-    console.log('complete');
-});
+}, function (e) { return console.log('error => ', e); });

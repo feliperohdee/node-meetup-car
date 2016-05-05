@@ -24,7 +24,7 @@ Observable.fromEvent<ws>(wss, 'connection')
 
 		return Observable.fromEvent(ws, 'message')
 			.takeUntil(takeUntil)
-			.map(data => { ws, data });
+			.map(data => ({ ws, data }));
 	})
 	.subscribe(response => {
 		let ws: ws = response.ws;
@@ -33,8 +33,6 @@ Observable.fromEvent<ws>(wss, 'connection')
 		try {
 			data = JSON.parse(data);
 		} catch (e) { }
-
-		console.log('received data', data);
 
 		if (!data.cmd) {
 			return;
@@ -51,6 +49,4 @@ Observable.fromEvent<ws>(wss, 'connection')
 				pi.forEach(ws => ws.send(JSON.stringify({ cmd: data.cmd })));
 				break;
 		}
-	}, e => console.log('error => ', e), () => {
-		console.log('complete');
-	});
+	}, e => console.log('error => ', e));
