@@ -2,18 +2,21 @@ import * as ws from 'ws';
 import * as gpio from 'rpi-gpio';
 
 let pin: number = 18;
+let client = new ws('ws://www.host.com/path');
 
-gpio.setup(pin, gpio.DIR_OUT, () => go());
+gpio.setup(pin, gpio.DIR_OUT);
 gpio.setMode(gpio.MODE_BCM);
 
-function go() {
-	setInterval(() => {
-		// console.log('write');
-		gpio.write(pin, 1, () => console.log('up'));
+client.on('open', () => {
+	console.log('client is open');
 
-		setTimeout(() => {
-			// console.log('teardown');
+	client.on('message', data => {
+		data = JSON.parse(data);
+		
+		if (data.cmd === 'on'){
+			gpio.write(pin, 1, () => console.log('up'));
+		}else{
 			gpio.write(pin, 0, () => console.log('down'));
-		}, 500);
-	}, 1000);
-}
+		}
+	});
+});

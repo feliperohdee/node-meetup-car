@@ -1,15 +1,19 @@
 "use strict";
+var ws = require('ws');
 var gpio = require('rpi-gpio');
 var pin = 18;
-gpio.setup(pin, gpio.DIR_OUT, function () { return go(); });
+var client = new ws('ws://www.host.com/path');
+gpio.setup(pin, gpio.DIR_OUT);
 gpio.setMode(gpio.MODE_BCM);
-function go() {
-    setInterval(function () {
-        // console.log('write');
-        gpio.write(pin, 1, function () { return console.log('up'); });
-        setTimeout(function () {
-            // console.log('teardown');
+client.on('open', function () {
+    console.log('client is open');
+    client.on('message', function (data) {
+        data = JSON.parse(data);
+        if (data.cmd === 'on') {
+            gpio.write(pin, 1, function () { return console.log('up'); });
+        }
+        else {
             gpio.write(pin, 0, function () { return console.log('down'); });
-        }, 500);
-    }, 1000);
-}
+        }
+    });
+});
