@@ -1,0 +1,15 @@
+{
+  "name": "remote",
+  "version": "1.0.0",
+  "description": "",
+  "main": "__build__/iot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "rpi-gpio": "^0.7.0",
+    "ws": "^1.1.0"
+  }
+}
