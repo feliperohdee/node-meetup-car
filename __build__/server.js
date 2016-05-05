@@ -1,6 +1,9 @@
 "use strict";
+var http_1 = require('http');
 var ws = require('ws');
-var wss = new ws.Server({ port: (process.env.PORT || 9090) });
+var server = http_1.createServer();
+var wss = new ws.Server({ server: server });
+server.listen(process.env.PORT || 9090);
 wss.on('connection', function (ws) {
     console.log('client connected');
     setInterval(function () {
