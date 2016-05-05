@@ -2,6 +2,7 @@
 var gpio = require('rpi-gpio');
 var pin = 15;
 gpio.setup(pin, gpio.DIR_OUT, function () { return go(); });
+gpio.setMode(gpio.MODE_BCM);
 function go() {
     setInterval(function () {
         console.log('write');
