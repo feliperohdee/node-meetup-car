@@ -13,13 +13,7 @@ Observable.fromEvent<any>(client, 'open')
 		console.log('client is open');
 		client.send(JSON.stringify({ cmd: 'subscribePi', id: 'ledPi' }));
 	});
-
-Observable.interval(15000)
-	.filter(() => client.readyState === client.OPEN)
-	.subscribe(() => {
-		client.send('ping');
-	});
-
+	
 Observable.fromEvent<any>(client, 'message')
 	.subscribe(data => {
 		try {

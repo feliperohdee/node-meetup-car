@@ -11,11 +11,6 @@ rxjs_1.Observable.fromEvent(client, 'open')
     console.log('client is open');
     client.send(JSON.stringify({ cmd: 'subscribePi', id: 'ledPi' }));
 });
-rxjs_1.Observable.interval(15000)
-    .filter(function () { return client.readyState === client.OPEN; })
-    .subscribe(function () {
-    client.send('ping');
-});
 rxjs_1.Observable.fromEvent(client, 'message')
     .subscribe(function (data) {
     try {
