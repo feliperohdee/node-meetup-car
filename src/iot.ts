@@ -10,13 +10,16 @@ gpio.setMode(gpio.MODE_BCM);
 client.on('open', () => {
 	console.log('client is open');
 
+	client.send(JSON.stringify({cmd: 'subscribePi', id: 'ledPi'}));
+
 	client.on('message', data => {
 		data = JSON.parse(data);
+		console.log('received data', data);
 		
 		if (data.cmd === 'on'){
-			gpio.write(pin, 1, () => console.log('up'));
+			gpio.write(pin, 1);
 		}else{
-			gpio.write(pin, 0, () => console.log('down'));
+			gpio.write(pin, 0);
 		}
 	});
 });
