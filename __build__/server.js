@@ -7,9 +7,13 @@ server.listen(process.env.PORT || 9090);
 wss.on('connection', function (ws) {
     console.log('client connected');
     setInterval(function () {
-        ws.send(JSON.stringify({ cmd: 'on' }));
+        if (ws.readyState === 1) {
+            ws.send(JSON.stringify({ cmd: 'on' }));
+        }
         setTimeout(function () {
-            ws.send(JSON.stringify({ cmd: 'off' }));
+            if (ws.readyState === 1) {
+                ws.send(JSON.stringify({ cmd: 'off' }));
+            }
         }, 750);
     }, 1500);
 });

@@ -11,10 +11,14 @@ wss.on('connection', ws => {
 	console.log('client connected');
 
 	setInterval(() => {
-		ws.send(JSON.stringify({ cmd: 'on' }));
+		if (ws.readyState === 1){
+			ws.send(JSON.stringify({ cmd: 'on' }));
+		}
 
 		setTimeout(() => {
-			ws.send(JSON.stringify({ cmd: 'off' }));
+			if (ws.readyState === 1) {
+				ws.send(JSON.stringify({ cmd: 'off' }));
+			}
 		}, 750);
 	}, 1500);
 });
