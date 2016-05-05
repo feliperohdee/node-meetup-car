@@ -22,7 +22,8 @@ wss.on('connection', function (ws) {
                 break;
         }
     });
-    ws.on('disconnect', function () {
+    ws.on('close', function () {
+        console.log('removed node');
         pi.delete(ws);
     });
 });
