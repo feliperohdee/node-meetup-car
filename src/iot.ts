@@ -1,16 +1,18 @@
 import * as ws from 'ws';
 import * as gpio from 'rpi-gpio';
 
-gpio.setup(7, gpio.DIR_OUT);
+let pin: number = 15;
 
-setTimeout(() => {
-	gpio.write(7, 1);
-}, 1500);
+gpio.setup(pin, gpio.DIR_OUT, () => go());
 
-setInterval(() => {
-	gpio.write(7, 1);
+function go() {
+	setInterval(() => {
+		console.log('write');
+		gpio.write(pin, 1);
 
-	setTimeout(() => {
-		gpio.write(7, 1);
-	}, 500);
-}, 1000);
+		setTimeout(() => {
+			console.log('teardown');
+			gpio.write(pin, 0);
+		}, 500);
+	}, 1000);
+}
