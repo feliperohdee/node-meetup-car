@@ -4,7 +4,7 @@ import * as gpio from 'rpi-gpio';
 
 let server: Server = createServer();
 let wss: ws.Server = new ws.Server({ server });
-let pi: Map<number, ws> = new Map<number, ws>();
+let pi: Set<ws> = new Set<ws>();
 
 server.listen(process.env.PORT || 9090);
 
@@ -17,14 +17,18 @@ wss.on('connection', ws => {
 
 		switch (data.cmd) {
 			case 'subscribePi':
-				pi.set(data.id, ws);
+				pi.add(ws);
 				break;
 			case 'unsubscribePi':
-				pi.delete(data.id);
+				pi.delete(ws);
 				break;
 			default:
 				pi.forEach(ws => ws.send(JSON.stringify({ cmd: data.cmd })));
 				break;
 		}
+	});
+
+	ws.on('disconnect', () => {
+		pi.delete(ws);
 	});
 });
