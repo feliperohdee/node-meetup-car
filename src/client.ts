@@ -1,5 +1,9 @@
 let ws: WebSocket = new WebSocket('ws://node-remote-server.herokuapp.com');
-let send: Function = cmd => ws.send(JSON.stringify({ cmd }));
+let text: Element = document.querySelector('h1');
+let send: Function = cmd => {
+	ws.send(JSON.stringify({ cmd }));
+	text.innerHTML = cmd;
+};
 
 ws.onopen = () => {
 	window.addEventListener('keydown', e => {

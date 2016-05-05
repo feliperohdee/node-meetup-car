@@ -7,7 +7,8 @@
     "start": "node __build__/server.js",
     "commit": "npm run compile && git add . && git commit -m 'do changes' && git push origin remote-server",
     "compile": "rm -rf __build__ && tsc",
-    "deploy": "git push heroku remote-server:master && heroku logs --source app --tail"
+    "deploy": "git push heroku remote-server:master && heroku logs --source app --tail",
+    "serve": "npm run compile && http-server . -p 9090"
   },
   "author": "",
   "license": "ISC",

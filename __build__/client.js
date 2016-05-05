@@ -1,5 +1,9 @@
 var ws = new WebSocket('ws://node-remote-server.herokuapp.com');
-var send = function (cmd) { return ws.send(JSON.stringify({ cmd: cmd })); };
+var text = document.querySelector('h1');
+var send = function (cmd) {
+    ws.send(JSON.stringify({ cmd: cmd }));
+    text.innerHTML = cmd;
+};
 ws.onopen = function () {
     window.addEventListener('keydown', function (e) {
         switch (e.keyCode) {
