@@ -22,6 +22,10 @@ Observable.fromEvent<any>(client, 'message')
 
 		console.log('received data', data);
 
+		if (!data.cmd){
+			return;
+		}
+
 		if (data.cmd === 'on') {
 			gpio.write(pin, 1);
 		} else {
