@@ -1,24 +1,32 @@
 "use strict";
 var ws = require('ws');
 var gpio = require('rpi-gpio');
+var rxjs_1 = require('rxjs');
 var pin = 18;
 var client = new ws('ws://node-remote-server.herokuapp.com');
 gpio.setup(pin, gpio.DIR_OUT);
 gpio.setMode(gpio.MODE_BCM);
-client.on('open', function () {
+rxjs_1.Observable.fromEvent(client, 'open')
+    .subscribe(function () {
     console.log('client is open');
     client.send(JSON.stringify({ cmd: 'subscribePi', id: 'ledPi' }));
-    client.on('message', function (data) {
-        try {
-            data = JSON.parse(data);
-        }
-        catch (e) { }
-        console.log('received data', data);
-        if (data.cmd === 'on') {
-            gpio.write(pin, 1);
-        }
-        else {
-            gpio.write(pin, 0);
-        }
-    });
+});
+rxjs_1.Observable.interval(15000)
+    .filter(function () { return client.readyState === client.OPEN; })
+    .subscribe(function () {
+    client.send('ping');
+});
+rxjs_1.Observable.fromEvent(client, 'message')
+    .subscribe(function (data) {
+    try {
+        data = JSON.parse(data);
+    }
+    catch (e) { }
+    console.log('received data', data);
+    if (data.cmd === 'on') {
+        gpio.write(pin, 1);
+    }
+    else {
+        gpio.write(pin, 0);
+    }
 });
