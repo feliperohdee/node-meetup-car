@@ -14,6 +14,9 @@ wss.on('connection', function (ws) {
         }
         catch (e) { }
         console.log('received data', data);
+        if (!data.cmd) {
+            return;
+        }
         switch (data.cmd) {
             case 'subscribePi':
                 pi.add(ws);
