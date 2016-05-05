@@ -9,7 +9,6 @@ var Socket = (function () {
             .mapTo(this.client);
         this.onMessage = rxjs_1.Observable.fromEvent(this.client, 'message')
             .map(function (data) {
-            console.log('received data', data);
             try {
                 return JSON.parse(data);
             }

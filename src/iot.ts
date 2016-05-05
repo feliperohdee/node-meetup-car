@@ -23,8 +23,10 @@ serial.onReady
 			});
 
 		socket.onMessage
-			.distinctUntilChanged((a, b) => a.cmd === b.cmd)
+			.distinctUntilChanged()
 			.subscribe(data => {
+				console.log('received data', data);
+
 				switch (data.cmd) {
 					case 'on':
 						gpio.write(pin, 1);
@@ -36,7 +38,9 @@ serial.onReady
 						serial.send('f');
 						break;
 					case 'stop':
-						serial.send('s');
+						for (let i = 0; i < 5; ++i) {
+							serial.send('s')
+						}
 						break;
 					case 'left':
 						serial.send('l');

@@ -19,8 +19,9 @@ serial.onReady
         });
     });
     socket.onMessage
-        .distinctUntilChanged(function (a, b) { return a.cmd === b.cmd; })
+        .distinctUntilChanged()
         .subscribe(function (data) {
+        console.log('received data', data);
         switch (data.cmd) {
             case 'on':
                 gpio.write(pin, 1);
@@ -32,7 +33,9 @@ serial.onReady
                 serial.send('f');
                 break;
             case 'stop':
-                serial.send('s');
+                for (var i = 0; i < 5; ++i) {
+                    serial.send('s');
+                }
                 break;
             case 'left':
                 serial.send('l');

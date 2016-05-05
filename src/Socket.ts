@@ -15,8 +15,6 @@ export class Socket{
 
 		this.onMessage = Observable.fromEvent<any>(this.client, 'message')
 			.map(data => {
-				console.log('received data', data);
-
 				try {
 					return JSON.parse(data);
 				} catch (e) {
