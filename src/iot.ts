@@ -13,7 +13,11 @@ client.on('open', () => {
 	client.send(JSON.stringify({cmd: 'subscribePi', id: 'ledPi'}));
 
 	client.on('message', data => {
-		data = JSON.parse(data);
+		
+		try{
+			data = JSON.parse(data);
+		}catch(e){}
+
 		console.log('received data', data);
 		
 		if (data.cmd === 'on'){
