@@ -2,20 +2,17 @@
 var gpio = require('rpi-gpio');
 var Serial_1 = require('./Serial');
 var Socket_1 = require('./Socket');
-var serial = new Serial_1.Serial();
-var socket = new Socket_1.Socket();
 // setup pi
 var pin = 18;
 gpio.setup(pin, gpio.DIR_OUT);
 gpio.setMode(gpio.MODE_BCM);
-serial.onData
-    .subscribe(function (data) { return console.log('serial data', data); });
+var serial = new Serial_1.Serial();
 serial.onReady
     .subscribe(function (port) {
+    var socket = new Socket_1.Socket();
     // 
     socket.onOpen
         .subscribe(function () {
-        console.log('client is open');
         socket.send({
             cmd: 'subscribePi',
             id: 'ledPi'

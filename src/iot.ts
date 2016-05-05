@@ -2,24 +2,20 @@ import * as gpio from 'rpi-gpio';
 import {Serial} from './Serial';
 import {Socket} from './Socket';
 
-let serial: Serial = new Serial();
-let socket: Socket = new Socket();
-
 // setup pi
 let pin: number = 18;
 gpio.setup(pin, gpio.DIR_OUT);
 gpio.setMode(gpio.MODE_BCM);
 
-serial.onData
-	.subscribe(data => console.log('serial data', data));
+let serial: Serial = new Serial();
 
 serial.onReady
 	.subscribe(port => {
+		let socket: Socket = new Socket();
+
 		// 
 		socket.onOpen
 			.subscribe(() => {
-				console.log('client is open');
-
 				socket.send({
 					cmd: 'subscribePi',
 					id: 'ledPi'
