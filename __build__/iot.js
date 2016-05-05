@@ -19,7 +19,7 @@ serial.onReady
         });
     });
     socket.onMessage
-        .distinctUntilChanged()
+        .distinctUntilChanged(function (a, b) { return a.cmd === b.cmd; })
         .subscribe(function (data) {
         console.log('received data', data);
         switch (data.cmd) {

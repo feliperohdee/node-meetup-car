@@ -23,7 +23,7 @@ serial.onReady
 			});
 
 		socket.onMessage
-			.distinctUntilChanged()
+			.distinctUntilChanged((a, b) => a.cmd === b.cmd)
 			.subscribe(data => {
 				console.log('received data', data);
 
