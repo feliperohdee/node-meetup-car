@@ -1,7 +1,7 @@
 import * as ws from 'ws';
 import * as gpio from 'rpi-gpio';
 
-let pin: number = 15;
+let pin: number = 18;
 
 gpio.setup(pin, gpio.DIR_OUT, () => go());
 gpio.setMode(gpio.MODE_BCM);

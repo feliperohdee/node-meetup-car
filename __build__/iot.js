@@ -1,6 +1,6 @@
 "use strict";
 var gpio = require('rpi-gpio');
-var pin = 15;
+var pin = 18;
 gpio.setup(pin, gpio.DIR_OUT, function () { return go(); });
 gpio.setMode(gpio.MODE_BCM);
 function go() {
