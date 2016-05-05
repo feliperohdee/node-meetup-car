@@ -6,6 +6,13 @@ var server = http_1.createServer();
 var wss = new ws.Server({ server: server });
 var pi = new Set();
 server.listen(process.env.PORT || 9090);
+rxjs_1.Observable.interval(15000)
+    .mapTo(wss)
+    .subscribe(function (wss) {
+    wss.clients.forEach(function (ws) {
+        ws.send('ping');
+    });
+});
 rxjs_1.Observable.fromEvent(wss, 'connection')
     .do(function (ws) {
     console.log('client connected');
@@ -29,6 +36,7 @@ rxjs_1.Observable.fromEvent(wss, 'connection')
         data = JSON.parse(data);
     }
     catch (e) { }
+    console.log('receive', data);
     if (!data.cmd) {
         return;
     }

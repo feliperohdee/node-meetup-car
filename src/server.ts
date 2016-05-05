@@ -9,6 +9,14 @@ let pi: Set<ws> = new Set<ws>();
 
 server.listen(process.env.PORT || 9090);
 
+Observable.interval(15000)
+	.mapTo(wss)
+	.subscribe(wss => {
+		wss.clients.forEach(ws => {
+			ws.send('ping');
+		});
+	});
+
 Observable.fromEvent<ws>(wss, 'connection')
 	.do(ws => {
 		console.log('client connected');
@@ -33,6 +41,8 @@ Observable.fromEvent<ws>(wss, 'connection')
 		try {
 			data = JSON.parse(data);
 		} catch (e) { }
+
+		console.log('receive', data);
 
 		if (!data.cmd) {
 			return;
