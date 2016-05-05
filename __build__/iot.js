@@ -8,6 +8,8 @@ var socket = new Socket_1.Socket();
 var pin = 18;
 gpio.setup(pin, gpio.DIR_OUT);
 gpio.setMode(gpio.MODE_BCM);
+serial.onData
+    .subscribe(function (data) { return console.log('serial data', data); });
 serial.onReady
     .subscribe(function (port) {
     // 

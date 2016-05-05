@@ -10,6 +10,9 @@ let pin: number = 18;
 gpio.setup(pin, gpio.DIR_OUT);
 gpio.setMode(gpio.MODE_BCM);
 
+serial.onData
+	.subscribe(data => console.log('serial data', data));
+
 serial.onReady
 	.subscribe(port => {
 		// 
