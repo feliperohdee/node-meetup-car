@@ -1,4 +1,5 @@
 import {createServer, Server} from 'http';
+import {Observable} from 'rxjs';
 import * as ws from 'ws';
 import * as gpio from 'rpi-gpio';
 
@@ -8,37 +9,48 @@ let pi: Set<ws> = new Set<ws>();
 
 server.listen(process.env.PORT || 9090);
 
-wss.on('connection', ws => {
-	console.log('client connected');
+Observable.fromEvent<ws>(wss, 'connection')
+	.do(ws => {
+		console.log('client connected');
+		ws.send('welcome to real time world!');
+	})
+	.mergeMap<any>(ws => {
+		let takeUntil: Observable<any> = Observable.fromEvent(ws, 'close')
+			.first()
+			.do(() => {
+				console.log('removed node');
+				pi.delete(ws);
+			});
 
-	ws.send('welcome to real time world!');
+		return Observable.fromEvent(ws, 'message')
+			.takeUntil(takeUntil)
+			.map(data => { ws, data });
+	})
+	.subscribe(response => {
+		let ws: ws = response.ws;
+		let data: any = response.data;
 
-	ws.on('message', data => {
-		try{
+		try {
 			data = JSON.parse(data);
-		}catch(e){}
-		
+		} catch (e) { }
+
 		console.log('received data', data);
 
-		if (!data.cmd){
+		if (!data.cmd) {
 			return;
 		}
 
 		switch (data.cmd) {
 			case 'subscribePi':
-				pi.add(ws);
+				pi.add(response.ws);
 				break;
 			case 'unsubscribePi':
-				pi.delete(ws);
+				pi.delete(response.ws);
 				break;
 			default:
 				pi.forEach(ws => ws.send(JSON.stringify({ cmd: data.cmd })));
 				break;
 		}
+	}, e => console.log('error => ', e), () => {
+		console.log('complete');
 	});
-
-	ws.on('close', () => {
-		console.log('removed node');
-		pi.delete(ws);
-	});
-});

@@ -7,7 +7,7 @@
     "start": "node __build__/server.js",
     "commit": "npm run compile && git add . && git commit -m 'do changes' && git push origin remote-server",
     "compile": "rm -rf __build__ && tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "deploy": "git push heroku remote-server:master && heroku logs --source app --tail"
   },
   "author": "",
   "license": "ISC",
