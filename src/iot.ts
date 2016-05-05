@@ -23,6 +23,7 @@ serial.onReady
 			});
 
 		socket.onMessage
+			.distinctUntilChanged()
 			.subscribe(data => {
 				switch (data.cmd) {
 					case 'on':

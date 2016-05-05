@@ -19,6 +19,7 @@ serial.onReady
         });
     });
     socket.onMessage
+        .distinctUntilChanged()
         .subscribe(function (data) {
         switch (data.cmd) {
             case 'on':
