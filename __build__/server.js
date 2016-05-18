@@ -42,10 +42,10 @@ rxjs_1.Observable.fromEvent(wss, 'connection')
     }
     switch (data.cmd) {
         case 'subscribePi':
-            pi.add(response.ws);
+            pi.add(ws);
             break;
         case 'unsubscribePi':
-            pi.delete(response.ws);
+            pi.delete(ws);
             break;
         default:
             pi.forEach(function (ws) { return ws.send(JSON.stringify({ cmd: data.cmd })); });
