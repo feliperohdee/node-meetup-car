@@ -1,54 +1,47 @@
-import * as gpio from 'rpi-gpio';
 import {Serial} from './Serial';
 import {Socket} from './Socket';
-
-// setup pi
-let pin: number = 18;
-gpio.setup(pin, gpio.DIR_OUT);
-gpio.setMode(gpio.MODE_BCM);
 
 let serial: Serial = new Serial();
 
 serial.onReady
 	.subscribe(port => {
-		let socket: Socket = new Socket();
+		/**
+		 * #1 - Quando o transmissor estiver pronto, irá emitir um comando "Ready", este por suz vez é interpretado pela
+		 * biblioteca Serial, e emite um evento onReady.
+		 * Neste momento estamos prontos para abrir uma conexão socket.
+		 */
 
-		// 
-		socket.onOpen
-			.subscribe(() => {
-				socket.send({
-					cmd: 'subscribePi',
-					id: 'ledPi'
-				});
-			});
+		/*
+	   socket.onOpen
+		   .subscribe(() => {
+		   	
+			   #2 - Quando a conexão for estabelecida, devemos nos inscrever no servidor, seguindo o protocolo, enviando um comando "subscribePI".
+			   Para isto, devemos enviar um comando ao servidor através do socket, utilizando um object com a assinatura {cmd: any}.
+			   Lembre-se, apesar de estarmos enviando um objeto, este deve ser transformato em string, byte, ou blob antes de ser enviado.
+		   });
+	   */
 
+		/*
 		socket.onMessage
-			.distinctUntilChanged((a, b) => a.cmd === b.cmd)
 			.subscribe(data => {
-				console.log('received data', data);
+				 #3 - Por último, a parte mais importante do código, onde vamos receber as mensagens e manipula-las de acordo
+				 com o protocolo estabelecido no firmware do carrinho, no qual:
 
-				switch (data.cmd) {
-					case 'on':
-						gpio.write(pin, 1);
-						break;
-					case 'off':
-						gpio.write(pin, 0);
-						break;
-					case 'front':
-						serial.send('f');
-						break;
-					case 'stop':
-						for (let i = 0; i < 5; ++i) {
-							serial.send('s')
-						}
-						break;
-					case 'left':
-						serial.send('l');
-						break;
-					case 'right':
-						serial.send('r');
-						break;
-				}
+				 front => f
+				 stop => s
+				 left => l
+				 right => r
+
+				 Os comandos para o carrinho serão enviados via serial para o arduino.
+
+				 Uma dica: as vezes o transmissor de radio frequencia falha, é importante garantirmos a entrega pelo menos
+				 do comando stop. Como? Criando chamadas redundantes uma vez que não temos garantia de entrega.
+
+				 Mais uma dica: Ao receber uma mensagem, ela pode ser exaamente igual a anterior, para não fragmentar a porta serial
+				 com mensgens redundantes é possível filtra-las e acordo com sua predecessora usando .distinctUntilChanged().
 			});
+		*/
 	});
+
+
 

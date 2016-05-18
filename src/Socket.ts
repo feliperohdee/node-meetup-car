@@ -7,12 +7,17 @@ export class Socket{
 	public onMessage: Observable<any>;
 
 	constructor(){
+		/**
+		 * abre uma conexão socket em modo cliente
+		 */
 		this.client = new ws('ws://node-remote-server.herokuapp.com');
 
-		// setup observables
+		// observable que monitora quando o cliente apre a conexão e mapeia o resultado
 		this.onOpen = Observable.fromEvent<ws>(this.client, 'open')
 			.mapTo(this.client);
 
+		// observable que monitora as mensagens e cuida de trasforma-la de string para objeto
+		// além de filtrar comandos undefined
 		this.onMessage = Observable.fromEvent<any>(this.client, 'message')
 			.map(data => {
 				try {
