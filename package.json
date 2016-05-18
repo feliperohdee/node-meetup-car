@@ -8,7 +8,8 @@
     "commit": "npm run compile && git add . && git commit -m 'do changes' && git push origin remote-server",
     "compile": "rm -rf __build__ && tsc",
     "deploy": "git push heroku remote-server:master && heroku logs --source app --tail",
-    "serve": "npm run compile && node_modules/.bin/http-server . -p 9090"
+    "serve": "npm run compile && node_modules/.bin/http-server . -p 9090",
+    "static": "aws s3 sync . s3://node-meetup --exclude '*' --include 'public/*.html' --include '__build__/client.js' --acl public-read"
   },
   "author": "",
   "license": "ISC",
